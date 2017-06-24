@@ -63,10 +63,7 @@ int main()
         
         if (event == "telemetry") {
           // j[1] is the data JSON object
-
-
           if (!pf.initialized()) {
-
           	// Sense noisy position data from the simulator
 			double sense_x = std::stod(j[1]["sense_x"].get<std::string>());
 			double sense_y = std::stod(j[1]["sense_y"].get<std::string>());
@@ -109,7 +106,6 @@ int main()
 				obs.y = y_sense[i];
 				noisy_observations.push_back(obs);
         	}
-
 		  // Update the weights and resample
 		  pf.updateWeights(sensor_range, sigma_landmark, noisy_observations, map);
 		  pf.resample();
@@ -156,7 +152,7 @@ int main()
   // We don't need this since we're not using HTTP but if it's removed the program
   // doesn't compile :-(
   h.onHttpRequest([](uWS::HttpResponse *res, uWS::HttpRequest req, char *data, size_t, size_t) {
-    const std::string s = "<h1>Hello world!</h1>";
+    const std::string s = "<h1>Hello multiverse!</h1>";
     if (req.getUrl().valueLength == 1)
     {
       res->end(s.data(), s.length());
