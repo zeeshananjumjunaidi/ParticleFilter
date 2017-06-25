@@ -128,7 +128,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 		double sin_theta = sin(particles[i].theta);
 		double cos_theta = cos(particles[i].theta);
 
-		//dataAssociation(observations, observations);
+
 		for (int j = 0; j < observations.size(); j++) {
 			// Observation measurement transformations
 			LandmarkObs observation;
@@ -136,9 +136,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			observation.x = particles[i].x + (observations[j].x * cos_theta) - (observations[j].y * sin_theta);
 			observation.y = particles[i].y + (observations[j].x * sin_theta) + (observations[j].y * cos_theta);
 
-
 			bool in_range = false;
-			Map::single_landmark_s nearest_lm;
+			Map::single_landmark_s nearest_landmark;
 			double nearest_dist = 10000000.0; // A big number
 			for (int k = 0; k < map_landmarks.landmark_list.size(); k++) {
 				Map::single_landmark_s cond_lm = map_landmarks.landmark_list[k];
@@ -146,7 +145,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 				double distance = dist(cond_lm.x_f, cond_lm.y_f, observation.x, observation.y);
 				if (distance < nearest_dist) {
 					nearest_dist = distance;
-					nearest_lm = cond_lm;
+					nearest_landmark = cond_lm;
 					if (distance < sensor_range) {
 						in_range = true;
 					}
@@ -155,18 +154,20 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			if (in_range)
 			{
 				// xi-ui from the weight formula
-				dx = observation.x - nearest_lm.x_f;
-				dy = observation.y - nearest_lm.y_f;
+				dx = observation.x - nearest_landmark.x_f;
+				dy = observation.y - nearest_landmark.y_f;
 				// we won't calclate the same calulcation for the weight on each iteration
 				// rather than we calculate only the changing variables such as x and mu
 				// we will apply exponent and normalizing term after iteration on observations.
-				weight_without_exp += pow(dx, 2) / sigma_xx + pow(dy,2) / sigma_yy;
+				weight_without_exp += pow(dx, 2) / sigma_xx + pow(dy, 2) / sigma_yy;
 			}
 			else {
 				//After multiplying with -0.5 and applying exponent it will reduced to smallest value
 				weight_without_exp += 100;
 			}
 		}
+
+
 		// here we only calculate exp(-1/2*(xi-ui)T*SigmaInv*(xi-ui)
 		particles[i].weight = exp(-0.5*weight_without_exp);
 		sum_w += particles[i].weight;
