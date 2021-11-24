@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+# ParticleFilter
+Particle Filter using Bicycle Model.
+
 # Overview
 This repository contains all the code needed to complete the final project for the Localization course in Udacity's Self-Driving Car Nanodegree.
 
@@ -133,7 +135,3 @@ The things the grading code is looking for are:
 2. **Performance**: your particle filter should complete execution within the time of 100 seconds.
 
 
-=======
-# ParticleFilter
-Particle Filter using Bicycle Model.
->>>>>>> 56e665a38f6926c166e61a3144263897683e0254
